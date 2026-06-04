@@ -20,7 +20,7 @@
     "server": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "displayName", "kind", "runner", "transport", "status", "auth", "summary", "doc", "snippet"],
+      "required": ["id", "displayName", "kind", "hosting", "runner", "transport", "status", "auth", "summary", "doc", "snippet"],
       "properties": {
         "id": {
           "type": "string",
@@ -31,6 +31,10 @@
         "kind": {
           "enum": ["local", "external", "remote"],
           "description": "local = FlexNetOS-built binary on PATH; external = third-party server run locally (npx/docker/binary); remote = hosted connector over the network."
+        },
+        "hosting": {
+          "enum": ["peer", "mcp_hub-child", "registry-only"],
+          "description": "Where the server's code lives. peer = top-level meta workspace member; mcp_hub-child = nested under mcp_hub via mcp_hub/.meta.yaml; registry-only = no code hosted (unmodified third-party or remote connector). See docs/server-hosting.md."
         },
         "runner": {
           "enum": ["binary", "npx", "docker", "http"],
@@ -51,6 +55,8 @@
         "connector": { "type": "string", "description": "Provisioning source for remote connectors (e.g. claude.ai)." },
         "repo": { "type": "string", "description": "Source repository (git URL or owner/name)." },
         "workspaceMember": { "type": "string", "description": "Directory name if this server is a member of the meta workspace." },
+        "subPath": { "type": "string", "description": "For hosting=mcp_hub-child: the directory under mcp_hub/ where the nested clone lives (matches the key in mcp_hub/.meta.yaml)." },
+        "pin": { "type": "string", "description": "Optional reviewed upstream commit SHA recorded for provenance (nested-meta tracks a branch, not a pinned commit)." },
         "status": { "enum": ["stable", "beta", "experimental", "deprecated"] },
         "toolPrefix": { "type": "string", "description": "Namespace prefix the server's tools share." },
         "toolCount": { "type": "integer", "minimum": 0 },
@@ -75,6 +81,10 @@
         {
           "if": { "properties": { "kind": { "const": "remote" } } },
           "then": { "required": ["url"] }
+        },
+        {
+          "if": { "properties": { "hosting": { "const": "mcp_hub-child" } } },
+          "then": { "required": ["subPath", "repo"] }
         }
       ]
     }

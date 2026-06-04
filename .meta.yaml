@@ -1,0 +1,12 @@
+# mcp_hub is a NESTED meta repo. It hosts the external MCP servers the FlexNetOS org
+# forks and maintains, giving each a child-repo identity under mcp_hub rather than a
+# top-level meta peer slot. The parent workspace marks `mcp_hub: { meta: true }` so
+# `meta git update -r` clones these, and `meta exec -r` spans them.
+#
+# Only `kind: external`, `hosting: mcp_hub-child` servers from registry.json belong here.
+# First-party servers (meta-mcp, weave) are top-level peers; remote connectors
+# (claude.ai) have no repo. See docs/server-hosting.md.
+projects:
+  n8n-mcp:
+    repo: git@github.com:FlexNetOS/n8n-mcp.git
+    tags: [mcp, external]

@@ -30,13 +30,26 @@ Every server is described once in `registry.json`; everything else points back t
    | `kind: local` | FlexNetOS-built binary on `PATH` | meta-mcp, weave |
    | `kind: external` | third-party server run locally | n8n-mcp (`npx`) |
    | `kind: remote` | hosted connector over the network | claude.ai connectors |
+   | `hosting: peer` | first-party meta workspace member | meta-mcp, weave |
+   | `hosting: mcp_hub-child` | forked external server hosted under mcp_hub | n8n-mcp |
+   | `hosting: registry-only` | no code hosted (unmodified third-party or remote) | claude.ai connectors |
    | `runner` | how it starts | `binary` / `npx` / `docker` / `http` |
    | `transport` | MCP transport | `stdio` (needs `command`) / `http` / `sse` (needs `url`) |
    | `auth` | strictest auth needed to use it at all | `none` / `oauth` / `api-key` |
 
+   `hosting` decides *where the code lives* and is governed by
+   [docs/server-hosting.md](docs/server-hosting.md) — read it before adding a `peer` or
+   `mcp_hub-child` server. For a `mcp_hub-child` you must also do step 2a below.
+
    Use `requiresApi: true` + `env` placeholders when only *some* tools need credentials
    (e.g. n8n-mcp's management tools). Never commit real secrets — use placeholders like
    `<your-api-key>`.
+
+2a. **(mcp_hub-child only)** Host the fork under mcp_hub: add it to
+   [`.meta.yaml`](.meta.yaml) (`projects:`) and [`.gitignore`](.gitignore) (`/<id>/`),
+   set `subPath: <id>` on the registry entry, and record an optional `pin` SHA. The
+   parent workspace already marks `mcp_hub: { meta: true }`, so `meta git update -r`
+   clones it into `mcp_hub/<id>/`. See [docs/server-hosting.md](docs/server-hosting.md).
 
 3. **Add a snippet** at `snippets/<id>.mcp.json` — a minimal, ready-to-merge
    `mcpServers` fragment. Put guidance and any "delete these vars for X" notes in a

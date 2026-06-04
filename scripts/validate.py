@@ -13,12 +13,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 KIND = {"local", "external", "remote"}
+HOSTING = {"peer", "mcp_hub-child", "registry-only"}
 RUNNER = {"binary", "npx", "docker", "http"}
 TRANSPORT = {"stdio", "http", "sse"}
 STATUS = {"stable", "beta", "experimental", "deprecated"}
 AUTH = {"none", "oauth", "api-key"}
-REQUIRED = ["id", "displayName", "kind", "runner", "transport", "status", "auth",
-            "summary", "doc", "snippet"]
+REQUIRED = ["id", "displayName", "kind", "hosting", "runner", "transport", "status",
+            "auth", "summary", "doc", "snippet"]
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 errors = []
@@ -57,9 +58,9 @@ def main():
                 err(f"[{sid}] duplicate id")
             seen_ids.add(s["id"])
 
-        for field, allowed in (("kind", KIND), ("runner", RUNNER),
-                               ("transport", TRANSPORT), ("status", STATUS),
-                               ("auth", AUTH)):
+        for field, allowed in (("kind", KIND), ("hosting", HOSTING),
+                               ("runner", RUNNER), ("transport", TRANSPORT),
+                               ("status", STATUS), ("auth", AUTH)):
             if field in s and s[field] not in allowed:
                 err(f"[{sid}] {field}={s[field]!r} not in {sorted(allowed)}")
 
@@ -68,6 +69,18 @@ def main():
             err(f"[{sid}] stdio transport requires 'command'")
         if s.get("kind") == "remote" and not s.get("url"):
             err(f"[{sid}] remote kind requires 'url'")
+
+        # hosting=mcp_hub-child must declare a subPath AND be listed in mcp_hub/.meta.yaml
+        if s.get("hosting") == "mcp_hub-child":
+            sub = s.get("subPath")
+            if not sub:
+                err(f"[{sid}] hosting=mcp_hub-child requires 'subPath'")
+            else:
+                meta_yaml = ROOT / ".meta.yaml"
+                if not meta_yaml.exists():
+                    err(f"[{sid}] hosting=mcp_hub-child but mcp_hub/.meta.yaml is missing")
+                elif f"{sub}:" not in meta_yaml.read_text():
+                    err(f"[{sid}] '{sub}' not listed as a project in mcp_hub/.meta.yaml")
 
         # referenced files exist
         for ref in ("doc", "snippet"):

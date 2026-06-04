@@ -26,6 +26,12 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 **external** = a third-party server run locally (e.g. via `npx`/Docker).
 **remote** = an OAuth-backed HTTP connector hosted via claude.ai (may be unavailable in headless runs).
 
+Each entry also has a **`hosting`** value — where its *code* lives:
+`peer` (top-level meta workspace member, e.g. meta-mcp/weave), `mcp_hub-child` (a forked
+external server hosted under mcp_hub via this repo's `.meta.yaml`, e.g. n8n-mcp), or
+`registry-only` (no code — unmodified third-party or remote connector). The policy is in
+[`docs/server-hosting.md`](docs/server-hosting.md).
+
 ## Quick start
 
 Register both local FlexNetOS servers in one go:
@@ -48,6 +54,8 @@ mcp_hub/
 ├── registry.json                  # machine-readable index of every server (source of truth)
 ├── registry.schema.json           # JSON Schema for registry entries
 ├── CONTRIBUTING.md                # how to add a server (the intake process)
+├── .meta.yaml                     # nested meta: hosted external servers (mcp_hub-child)
+├── n8n-mcp/                        # ← cloned by `meta git update -r` (gitignored)
 ├── snippets/                      # copy-paste .mcp.json fragments
 │   ├── meta.mcp.json
 │   ├── weave.mcp.json
@@ -65,7 +73,8 @@ mcp_hub/
 ├── scripts/
 │   └── validate.py                # registry ↔ snippets ↔ docs ↔ README checker (runs in CI)
 └── docs/
-    └── wiring.md                  # how to register with Claude Code / Desktop
+    ├── wiring.md                  # how to register with Claude Code / Desktop
+    └── server-hosting.md          # policy: peer vs mcp_hub-child vs registry-only
 ```
 
 ## Adding a server
@@ -75,12 +84,17 @@ mirror it. To add a server: add a registry entry (per
 [`registry.schema.json`](registry.schema.json)), a `snippets/<id>.mcp.json`, a
 `servers/<id>.md`, and a Catalog row — then run `python3 scripts/validate.py`.
 
-See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full process, the `kind`/`runner`/
-`transport`/`auth` conventions, and the templates in [`templates/`](templates).
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full process and the
+`kind`/`hosting`/`runner`/`transport`/`auth` conventions, and
+**[docs/server-hosting.md](docs/server-hosting.md)** for *where* a server's code should
+live (peer vs mcp_hub-child vs registry-only).
 
 ## Scope
 
 This catalogs **MCP servers** (tool providers for AI agents). It does not catalog the
-`meta` plugin system or CLI tools — those live in their own repos. `local` servers are
-workspace members (`meta_mcp/`, `weave/`; see the workspace `.meta.yaml`); `external` and
-`remote` servers are cataloged for discoverability but live outside the workspace.
+`meta` plugin system or CLI tools — those live in their own repos. The `hosting` field
+records where each server's code lives: `peer` servers are top-level workspace members
+(`meta_mcp/`, `weave/`); `mcp_hub-child` servers are forks hosted here via `.meta.yaml`
+(`n8n-mcp/`); `registry-only` servers (unmodified third-party + remote connectors) are
+cataloged for discoverability but live outside the workspace. See
+[docs/server-hosting.md](docs/server-hosting.md).
