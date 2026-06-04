@@ -1,0 +1,37 @@
+{
+  "_comment": "claude.ai connectors are REMOTE, OAuth-backed MCP servers. The canonical way to enable them is the claude.ai Connectors directory (Settings -> Connectors) or `claude mcp add --transport http <name> <url>`. The URLs below are PLACEHOLDERS — replace each with the endpoint shown on the connector's page in the claude.ai Connectors directory. Auth is interactive OAuth on first use, so these may be absent in headless/cron runs.",
+  "mcpServers": {
+    "Cloudflare Developer Platform": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/cloudflare/mcp"
+    },
+    "Figma": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/figma/mcp"
+    },
+    "Gmail": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/gmail/mcp"
+    },
+    "Google Calendar": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/google-calendar/mcp"
+    },
+    "Google Drive": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/google-drive/mcp"
+    },
+    "Hugging Face": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/hugging-face/mcp"
+    },
+    "Microsoft 365": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/microsoft-365/mcp"
+    },
+    "Notion": {
+      "type": "http",
+      "url": "https://<provisioned-by-claude.ai>/notion/mcp"
+    }
+  }
+}
