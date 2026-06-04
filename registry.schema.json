@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FlexNetOS/mcp_hub/registry.schema.json",
+  "title": "mcp_hub registry",
+  "description": "Canonical registry of MCP servers in the FlexNetOS workspace. Each entry in `servers[]` describes one MCP server, how to run it, and where its docs/snippet live.",
+  "type": "object",
+  "required": ["version", "updated", "org", "servers"],
+  "properties": {
+    "schema": { "type": "string" },
+    "version": { "type": "string", "description": "Registry semver; bump on every change." },
+    "updated": { "type": "string", "description": "ISO date (YYYY-MM-DD) of last change." },
+    "org": { "type": "string" },
+    "description": { "type": "string" },
+    "servers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/server" }
+    }
+  },
+  "$defs": {
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "kind", "runner", "transport", "status", "auth", "summary", "doc", "snippet"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Stable kebab-case identifier, unique within the registry."
+        },
+        "displayName": { "type": "string" },
+        "kind": {
+          "enum": ["local", "external", "remote"],
+          "description": "local = FlexNetOS-built binary on PATH; external = third-party server run locally (npx/docker/binary); remote = hosted connector over the network."
+        },
+        "runner": {
+          "enum": ["binary", "npx", "docker", "http"],
+          "description": "How the server is launched."
+        },
+        "transport": {
+          "enum": ["stdio", "http", "sse"],
+          "description": "MCP transport. stdio servers need `command`; http/sse remote servers need `url`."
+        },
+        "command": { "type": "string", "description": "Executable for stdio servers (e.g. meta-mcp, npx, docker)." },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Environment variables the server reads. Use placeholder values for secrets."
+        },
+        "url": { "type": "string", "description": "Endpoint for remote (http/sse) servers." },
+        "connector": { "type": "string", "description": "Provisioning source for remote connectors (e.g. claude.ai)." },
+        "repo": { "type": "string", "description": "Source repository (git URL or owner/name)." },
+        "workspaceMember": { "type": "string", "description": "Directory name if this server is a member of the meta workspace." },
+        "status": { "enum": ["stable", "beta", "experimental", "deprecated"] },
+        "toolPrefix": { "type": "string", "description": "Namespace prefix the server's tools share." },
+        "toolCount": { "type": "integer", "minimum": 0 },
+        "auth": {
+          "enum": ["none", "oauth", "api-key"],
+          "description": "Primary auth mechanism. Use the strictest required to use the server at all; note optional auth in `requiresApi`/`notes`."
+        },
+        "requiresApi": {
+          "type": "boolean",
+          "description": "True when a subset of tools needs external API credentials (set the keys in `env`)."
+        },
+        "summary": { "type": "string" },
+        "doc": { "type": "string", "description": "Path to the per-server reference doc, relative to repo root." },
+        "snippet": { "type": "string", "description": "Path to the copy-paste .mcp.json fragment, relative to repo root." },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "transport": { "const": "stdio" } } },
+          "then": { "required": ["command"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "remote" } } },
+          "then": { "required": ["url"] }
+        }
+      ]
+    }
+  }
+}

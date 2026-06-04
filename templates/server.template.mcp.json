@@ -1,0 +1,12 @@
+{
+  "_comment": "Replace <id> and the launch fields. For stdio servers use command/args (+ env for config/secrets, with placeholder values). For remote servers use { \"type\": \"http\", \"url\": \"…\" } instead. Delete this _comment or replace it with real wiring guidance.",
+  "mcpServers": {
+    "<id>": {
+      "command": "<executable>",
+      "args": [],
+      "env": {
+        "EXAMPLE_API_KEY": "<your-key>"
+      }
+    }
+  }
+}
