@@ -1,0 +1,4 @@
+# Nested meta projects (hosted external servers) are independent git repos cloned in
+# by `meta git update -r`. They are NOT part of mcp_hub's own history — ignore them.
+# Keep this in sync with the `projects:` in .meta.yaml.
+/n8n-mcp/
