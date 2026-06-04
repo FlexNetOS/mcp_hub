@@ -1,0 +1,16 @@
+{
+  "_comment": "n8n-mcp runs locally via npx (stdio). The 7 core tools (node docs, search, validation) work with NO credentials — you can delete the N8N_API_* vars for docs-only use. The 13 management tools (create/update/run workflows, executions, credentials) require N8N_API_URL + N8N_API_KEY pointing at your n8n instance. Requires Node.js (npx). Alternative: the ghcr.io/czlonkowski/n8n-mcp Docker image.",
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://your-n8n-instance.com",
+        "N8N_API_KEY": "<your-n8n-api-key>"
+      }
+    }
+  }
+}
