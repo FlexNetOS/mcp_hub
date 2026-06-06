@@ -11,7 +11,7 @@ management against a live n8n instance.
 | **Runner** | `npx` (or Docker) |
 | **Transport** | stdio |
 | **Language** | TypeScript / Node.js |
-| **Version** | 2.56.0 |
+| **Version** | 2.57.1 |
 | **License** | MIT |
 | **Auth** | API key — required only for the management tools |
 | **Status** | stable |
@@ -63,6 +63,32 @@ Drop-in: [`snippets/n8n-mcp.mcp.json`](../snippets/n8n-mcp.mcp.json)
 For **docs-only** use, drop `N8N_API_URL` / `N8N_API_KEY` — the 7 core tools still work.
 To enable the management tools, point them at your n8n instance and a valid API key.
 
+### Secretd-wrapped (no plaintext key in config)
+
+In the envctl workspace the API key is never written into the config — it is fetched at
+launch from the secretd vault via `secretctl`. Drop-in:
+[`snippets/n8n-mcp-secretd.mcp.json`](../snippets/n8n-mcp-secretd.mcp.json). It wraps the
+runner in a login shell that resolves `node` on PATH, points at a local n8n
+(`http://localhost:5678`), and substitutes the key from the `n8n-api-key` secret:
+
+```json
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "bash",
+      "args": [
+        "-lc",
+        "export PATH=\"$HOME/.bun/bin:$HOME/.local/bin:$PATH\"; export N8N_API_URL=http://localhost:5678; export N8N_API_KEY=\"$(secretctl secret get n8n-api-key --reveal --apply)\"; exec npx -y n8n-mcp"
+      ]
+    }
+  }
+}
+```
+
+The human first mints the key in the n8n UI (Settings → n8n API) and stores it with
+`secretctl secret add n8n-api-key --provider n8n --value-stdin`. Until then the management
+tools stay unavailable (the key resolves empty) while the 7 docs-only tools keep working.
+
 Or via CLI:
 
 ```bash
@@ -86,7 +112,7 @@ Plus system tools `n8n_health_check` and `n8n_audit_instance`. Start with
 
 ## Notes
 
-- This is a **fork** in the FlexNetOS org; tool names/counts track upstream as of v2.56.0.
+- This is a **fork** in the FlexNetOS org; tool names/counts track upstream as of v2.57.1.
 - Unlike `meta-mcp` and `weave`, n8n-mcp is **not** a meta workspace member — it's an
   external server cataloged here for discoverability and one-paste wiring.
 - It relates to the workspace `n8n` repo (the automation platform itself) but is a

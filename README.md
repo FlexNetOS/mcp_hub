@@ -12,7 +12,7 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 |---|---|---|---|---|---|
 | **meta** (`meta-mcp`) | local | stdio | 29 (`meta_*`) | [snippet](snippets/meta.mcp.json) | [meta_mcp.md](servers/meta_mcp.md) |
 | **weave** | local | stdio | 11 (`weave_*`) | [snippet](snippets/weave.mcp.json) | [weave.md](servers/weave.md) |
-| **n8n-mcp** | external | stdio (npx) | 7 core + 13 mgmt (`n8n_*`) | [snippet](snippets/n8n-mcp.mcp.json) | [n8n-mcp.md](servers/n8n-mcp.md) |
+| **n8n-mcp** | external | stdio (npx) | 7 core + 13 mgmt (`n8n_*`) | [snippet](snippets/n8n-mcp.mcp.json) · [secretd](snippets/n8n-mcp-secretd.mcp.json) | [n8n-mcp.md](servers/n8n-mcp.md) |
 | **Cloudflare Developer Platform** | remote | http (OAuth) | `mcp__claude_ai_Cloudflare_Developer_Platform__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Figma** | remote | http (OAuth) | `mcp__claude_ai_Figma__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Gmail** | remote | http (OAuth) | `mcp__claude_ai_Gmail__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
@@ -60,6 +60,7 @@ mcp_hub/
 │   ├── meta.mcp.json
 │   ├── weave.mcp.json
 │   ├── n8n-mcp.mcp.json
+│   ├── n8n-mcp-secretd.mcp.json   # n8n-mcp with the secretd key wrapper (localhost)
 │   ├── claude-ai.mcp.json         # remote connectors (placeholder URLs)
 │   └── all-local.mcp.json         # meta + weave in one file
 ├── servers/                       # per-server reference docs
