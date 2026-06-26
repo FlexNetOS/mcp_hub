@@ -1,0 +1,12 @@
+{
+  "_comment": "Playwright MCP in browser-extension mode: drives the user's own running Chrome/Edge through the 'Playwright MCP Bridge' extension (no separate headless browser). Requires the extension installed; copy its per-profile token into the PLAYWRIGHT_MCP_EXTENSION_TOKEN env var to skip the per-connection approval dialog. Uses `bunx` (not `npx`) because the meta-managed JS runtime is Bun and the bundled `npx` is non-functional. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop). Do NOT commit the literal token — set it in the environment / a gitignored local settings file.",
+  "mcpServers": {
+    "playwright": {
+      "command": "bunx",
+      "args": ["@playwright/mcp@latest", "--extension"],
+      "env": {
+        "PLAYWRIGHT_MCP_EXTENSION_TOKEN": "${PLAYWRIGHT_MCP_EXTENSION_TOKEN}"
+      }
+    }
+  }
+}

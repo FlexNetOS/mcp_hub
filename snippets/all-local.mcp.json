@@ -1,5 +1,5 @@
 {
-  "_comment": "Both FlexNetOS-built local (stdio) MCP servers in one drop-in file. Requires `meta-mcp` and `weave` on PATH. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop). For remote claude.ai connectors, see snippets/claude-ai.mcp.json.",
+  "_comment": "All four FlexNetOS-built local (stdio) MCP servers in one drop-in file. Requires `meta-mcp`, `weave`, `icm`, and `vox` on PATH. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop). For external npm-package servers (context7, playwright, n8n-mcp) see their per-server snippets; for remote claude.ai connectors, see snippets/claude-ai.mcp.json.",
   "mcpServers": {
     "meta": {
       "command": "meta-mcp",
@@ -8,6 +8,14 @@
     "weave": {
       "command": "weave",
       "args": ["mcp"]
+    },
+    "icm": {
+      "command": "icm",
+      "args": ["serve"]
+    },
+    "vox": {
+      "command": "vox",
+      "args": ["serve"]
     }
   }
 }

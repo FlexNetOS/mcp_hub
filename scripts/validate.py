@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 KIND = {"local", "external", "remote"}
 HOSTING = {"peer", "mcp_hub-child", "registry-only"}
-RUNNER = {"binary", "npx", "docker", "http"}
+RUNNER = {"binary", "npx", "bunx", "docker", "http"}
 TRANSPORT = {"stdio", "http", "sse"}
 STATUS = {"stable", "beta", "experimental", "deprecated"}
 AUTH = {"none", "oauth", "api-key"}
