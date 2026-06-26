@@ -1,0 +1,9 @@
+{
+  "_comment": "ICM (Infinite Context Memory): persistent cross-session memory for agents. FlexNetOS-built local stdio server. Requires `icm` on PATH. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop).",
+  "mcpServers": {
+    "icm": {
+      "command": "icm",
+      "args": ["serve"]
+    }
+  }
+}

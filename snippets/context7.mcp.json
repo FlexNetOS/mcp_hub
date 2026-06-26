@@ -1,0 +1,9 @@
+{
+  "_comment": "Context7: up-to-date, version-specific library/framework docs on demand. Uses `bunx` (not `npx`) because the meta-managed JS runtime is Bun and the bundled `npx` is non-functional. Get a key at context7.com and set it via the CONTEXT7_API_KEY env var — do NOT commit the literal key. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop).",
+  "mcpServers": {
+    "context7": {
+      "command": "bunx",
+      "args": ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
+    }
+  }
+}

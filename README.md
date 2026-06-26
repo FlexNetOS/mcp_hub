@@ -12,7 +12,11 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 |---|---|---|---|---|---|
 | **meta** (`meta-mcp`) | local | stdio | 29 (`meta_*`) | [snippet](snippets/meta.mcp.json) | [meta_mcp.md](servers/meta_mcp.md) |
 | **weave** | local | stdio | 11 (`weave_*`) | [snippet](snippets/weave.mcp.json) | [weave.md](servers/weave.md) |
+| **icm** | local | stdio | `icm_*` | [snippet](snippets/icm.mcp.json) | [icm.md](servers/icm.md) |
+| **vox** | local | stdio | `vox_*` | [snippet](snippets/vox.mcp.json) | [vox.md](servers/vox.md) |
 | **n8n-mcp** | external | stdio (npx) | 7 core + 13 mgmt (`n8n_*`) | [snippet](snippets/n8n-mcp.mcp.json) · [secretd](snippets/n8n-mcp-secretd.mcp.json) | [n8n-mcp.md](servers/n8n-mcp.md) |
+| **context7** | external | stdio (bunx) | `resolve-library-id`, `query-docs` | [snippet](snippets/context7.mcp.json) | [context7.md](servers/context7.md) |
+| **playwright** (browser extension) | external | stdio (bunx) | `mcp__playwright__*` | [snippet](snippets/playwright.mcp.json) | [playwright.md](servers/playwright.md) |
 | **Cloudflare Developer Platform** | remote | http (OAuth) | `mcp__claude_ai_Cloudflare_Developer_Platform__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Figma** | remote | http (OAuth) | `mcp__claude_ai_Figma__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Gmail** | remote | http (OAuth) | `mcp__claude_ai_Gmail__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
@@ -23,7 +27,9 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 | **Notion** | remote | http (OAuth) | `mcp__claude_ai_Notion__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 
 **local** = a FlexNetOS-built binary that must be on `PATH`.
-**external** = a third-party server run locally (e.g. via `npx`/Docker).
+**external** = a third-party server run locally (via `bunx`/Docker). Note: npm-package
+servers use **`bunx`**, not `npx` — the meta-managed JS runtime is Bun and the bundled
+`npx` is non-functional in this workspace.
 **remote** = an OAuth-backed HTTP connector hosted via claude.ai (may be unavailable in headless runs).
 
 Each entry also has a **`hosting`** value — where its *code* lives:
@@ -34,14 +40,16 @@ external server hosted under mcp_hub via this repo's `.meta.yaml`, e.g. n8n-mcp)
 
 ## Quick start
 
-Register both local FlexNetOS servers in one go:
+Register all four local FlexNetOS servers in one go:
 
 ```bash
 # build the binaries from the meta workspace
-cargo build --release -p meta-mcp -p weave
+cargo build --release -p meta-mcp -p weave -p icm -p vox
 # then merge snippets/all-local.mcp.json into your Claude config, or:
 claude mcp add meta  --scope user -- meta-mcp
 claude mcp add weave --scope user -- weave mcp
+claude mcp add icm   --scope user -- icm serve
+claude mcp add vox   --scope user -- vox serve
 ```
 
 For the claude.ai connectors, enable them in the claude.ai Connectors directory

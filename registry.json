@@ -1,7 +1,7 @@
 {
   "schema": "./registry.schema.json",
-  "version": "1.3.0",
-  "updated": "2026-06-05",
+  "version": "1.4.0",
+  "updated": "2026-06-26",
   "org": "FlexNetOS",
   "description": "Canonical registry of MCP servers used across the FlexNetOS meta workspace.",
   "servers": [
@@ -46,6 +46,46 @@
       "snippet": "snippets/weave.mcp.json"
     },
     {
+      "id": "icm",
+      "displayName": "icm",
+      "kind": "local",
+      "hosting": "peer",
+      "runner": "binary",
+      "transport": "stdio",
+      "command": "icm",
+      "args": [
+        "serve"
+      ],
+      "repo": "git@github.com:FlexNetOS/icm.git",
+      "workspaceMember": "icm",
+      "status": "stable",
+      "toolPrefix": "icm_",
+      "auth": "none",
+      "summary": "Infinite Context Memory — persistent cross-session memory for agents: recall/store/update memories, topic hygiene, memoirs, feedback, and transcripts.",
+      "doc": "servers/icm.md",
+      "snippet": "snippets/icm.mcp.json"
+    },
+    {
+      "id": "vox",
+      "displayName": "vox",
+      "kind": "local",
+      "hosting": "peer",
+      "runner": "binary",
+      "transport": "stdio",
+      "command": "vox",
+      "args": [
+        "serve"
+      ],
+      "repo": "git@github.com:FlexNetOS/vox.git",
+      "workspaceMember": "vox",
+      "status": "stable",
+      "toolPrefix": "vox_",
+      "auth": "none",
+      "summary": "Text-to-speech for spoken agent feedback: speak summaries, listen (vox_hear), manage voices/packs/clones, and configure backend.",
+      "doc": "servers/vox.md",
+      "snippet": "snippets/vox.mcp.json"
+    },
+    {
       "id": "n8n-mcp",
       "displayName": "n8n-mcp",
       "kind": "external",
@@ -72,6 +112,53 @@
       "snippet": "snippets/n8n-mcp.mcp.json",
       "notes": "Fork of czlonkowski/n8n-mcp (TypeScript, MIT). Runs via `npx n8n-mcp` or the ghcr.io/czlonkowski/n8n-mcp Docker image. Not a meta workspace member.",
       "subPath": "n8n-mcp"
+    },
+    {
+      "id": "context7",
+      "displayName": "Context7",
+      "kind": "external",
+      "hosting": "registry-only",
+      "runner": "bunx",
+      "transport": "stdio",
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "${CONTEXT7_API_KEY}"
+      ],
+      "repo": "upstash/context7",
+      "status": "stable",
+      "auth": "api-key",
+      "requiresApi": true,
+      "summary": "Up-to-date, version-specific library/framework documentation and code examples on demand (resolve-library-id + query-docs). Avoids stale training-data answers for SDKs, CLIs, and APIs.",
+      "doc": "servers/context7.md",
+      "snippet": "snippets/context7.mcp.json",
+      "notes": "Third-party (Upstash, MIT). Launched with `bunx` because the meta-managed JS runtime is Bun and the bundled `npx` is non-functional. Get a key at context7.com; pass it via the `${CONTEXT7_API_KEY}` env-ref (do not commit the literal key)."
+    },
+    {
+      "id": "playwright",
+      "displayName": "Playwright (browser extension)",
+      "kind": "external",
+      "hosting": "registry-only",
+      "runner": "bunx",
+      "transport": "stdio",
+      "command": "bunx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--extension"
+      ],
+      "env": {
+        "PLAYWRIGHT_MCP_EXTENSION_TOKEN": "${PLAYWRIGHT_MCP_EXTENSION_TOKEN}"
+      },
+      "repo": "microsoft/playwright-mcp",
+      "status": "stable",
+      "toolPrefix": "mcp__playwright__",
+      "auth": "none",
+      "summary": "Browser automation against the user's own running Chrome/Edge via the 'Playwright MCP Bridge' extension (--extension mode): navigate, click, type, snapshot, read console/network, and drive real authenticated tabs — no separate headless browser.",
+      "doc": "servers/playwright.md",
+      "snippet": "snippets/playwright.mcp.json",
+      "notes": "Third-party (Microsoft, Apache-2.0). Requires the 'Playwright MCP Bridge' Chrome/Edge extension installed; copy its per-profile token into `${PLAYWRIGHT_MCP_EXTENSION_TOKEN}` (env-ref, never commit the literal) to skip the per-connection approval dialog. Launched with `bunx` because the bundled `npx` is non-functional in the meta env."
     },
     {
       "id": "cloudflare",

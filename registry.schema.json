@@ -37,8 +37,8 @@
           "description": "Where the server's code lives. peer = top-level meta workspace member; mcp_hub-child = nested under mcp_hub via mcp_hub/.meta.yaml; registry-only = no code hosted (unmodified third-party or remote connector). See docs/server-hosting.md."
         },
         "runner": {
-          "enum": ["binary", "npx", "docker", "http"],
-          "description": "How the server is launched."
+          "enum": ["binary", "npx", "bunx", "docker", "http"],
+          "description": "How the server is launched. Prefer `bunx` (not `npx`) for npm-package servers in the meta workspace: the meta-managed JS runtime is Bun, and the bundled `node`/`npx` is a standalone binary without the npm lib (so `npx` is non-functional here). `bunx <pkg>` is the working, meta-native dlx runner."
         },
         "transport": {
           "enum": ["stdio", "http", "sse"],
