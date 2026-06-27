@@ -83,8 +83,14 @@ mcp_hub/
 │   └── validate.py                # registry ↔ snippets ↔ docs ↔ README checker (runs in CI)
 └── docs/
     ├── wiring.md                  # how to register with Claude Code / Desktop
-    └── server-hosting.md          # policy: peer vs mcp_hub-child vs registry-only
+    ├── server-hosting.md          # policy: peer vs mcp_hub-child vs registry-only
+    └── claude-config-inventory.md # census: what's actually wired across ~/ (vs the catalog)
 ```
+
+A live census of every Claude Code config surface under `/home/drdave` and the MCP servers
++ plugins each wires — i.e. *what is actually wired across the box*, a superset of this
+catalog — lives in
+[`docs/claude-config-inventory.md`](docs/claude-config-inventory.md).
 
 ## Adding a server
 
