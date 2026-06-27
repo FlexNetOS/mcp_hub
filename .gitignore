@@ -2,3 +2,13 @@
 # by `meta git update -r`. They are NOT part of mcp_hub's own history — ignore them.
 # Keep this in sync with the `projects:` in .meta.yaml.
 /n8n-mcp/
+
+# handoff continuity: binary ledger cache + migration artifacts are gitignored
+# (committed truth = .handoff/ledger.events.jsonl — ADR-0018 D1 / HFTASK-0067)
+.handoff/**/ledger.db
+.handoff/**/*.db-wal
+.handoff/**/*.db-shm
+.handoff/**/*.rvf
+.handoff/**/*.rvf.lock
+.handoff/**/*.sqlite.bak
+.handoff/**/*.redb.tmp
