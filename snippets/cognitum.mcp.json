@@ -1,0 +1,19 @@
+{
+  "_comment": "Cognitum — two SSE surfaces. (1) cognitum: cloud control plane at cognitum.one (7 cloud tools); read is open, writes need ${COGNITUM_API_KEY}. (2) cognitum-seed: local Seed appliance (114 on-device tools) at cognitum.local:8443, paired bearer ${COGNITUM_SEED_TOKEN}, USB-gadget fallback http://169.254.42.1/mcp. Use env-refs only — NEVER commit literal keys. Merge into .claude/settings.json or claude_desktop_config.json.",
+  "mcpServers": {
+    "cognitum": {
+      "type": "sse",
+      "url": "https://cognitum.one/mcpSse",
+      "env": {
+        "COGNITUM_API_KEY": "${COGNITUM_API_KEY}"
+      }
+    },
+    "cognitum-seed": {
+      "type": "sse",
+      "url": "https://cognitum.local:8443/mcp",
+      "env": {
+        "COGNITUM_SEED_TOKEN": "${COGNITUM_SEED_TOKEN}"
+      }
+    }
+  }
+}

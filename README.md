@@ -17,6 +17,9 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 | **n8n-mcp** | external | stdio (npx) | 7 core + 13 mgmt (`n8n_*`) | [snippet](snippets/n8n-mcp.mcp.json) · [secretd](snippets/n8n-mcp-secretd.mcp.json) | [n8n-mcp.md](servers/n8n-mcp.md) |
 | **context7** | external | stdio (bunx) | `resolve-library-id`, `query-docs` | [snippet](snippets/context7.mcp.json) | [context7.md](servers/context7.md) |
 | **playwright** (browser extension) | external | stdio (bunx) | `mcp__playwright__*` | [snippet](snippets/playwright.mcp.json) | [playwright.md](servers/playwright.md) |
+| **github** | external | stdio (docker) | repo · issues · PRs · Actions | [snippet](snippets/github.mcp.json) | [github.md](servers/github.md) |
+| **memory** | external | stdio (bunx) | knowledge-graph (`create_entities`, …) | [snippet](snippets/memory.mcp.json) | [memory.md](servers/memory.md) |
+| **sequential-thinking** | external | stdio (bunx) | `sequentialthinking` | [snippet](snippets/sequential-thinking.mcp.json) | [sequential-thinking.md](servers/sequential-thinking.md) |
 | **Cloudflare Developer Platform** | remote | http (OAuth) | `mcp__claude_ai_Cloudflare_Developer_Platform__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Figma** | remote | http (OAuth) | `mcp__claude_ai_Figma__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Gmail** | remote | http (OAuth) | `mcp__claude_ai_Gmail__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
@@ -25,6 +28,10 @@ copy-paste configs in [`snippets/`](snippets); per-server docs in [`servers/`](s
 | **Hugging Face** | remote | http (OAuth) | `mcp__claude_ai_Hugging_Face__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Microsoft 365** | remote | http (OAuth) | `mcp__claude_ai_Microsoft_365__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
 | **Notion** | remote | http (OAuth) | `mcp__claude_ai_Notion__*` | [snippet](snippets/claude-ai.mcp.json) | [claude-ai-connectors.md](servers/claude-ai-connectors.md) |
+| **exa** | remote | http | `web_search` + content | [snippet](snippets/exa.mcp.json) | [exa.md](servers/exa.md) |
+| **n8n-builtin** | remote | http (Bearer) | 1 tool per workflow | [snippet](snippets/n8n-builtin.mcp.json) | [n8n-builtin.md](servers/n8n-builtin.md) |
+| **cognitum** | remote | sse | 7 cloud tools | [snippet](snippets/cognitum.mcp.json) | [cognitum.md](servers/cognitum.md) |
+| **cognitum-seed** | remote | sse | 114 on-device tools | [snippet](snippets/cognitum.mcp.json) | [cognitum.md](servers/cognitum.md) |
 
 **local** = a FlexNetOS-built binary that must be on `PATH`.
 **external** = a third-party server run locally (via `bunx`/Docker). Note: npm-package
@@ -37,6 +44,21 @@ Each entry also has a **`hosting`** value — where its *code* lives:
 external server hosted under mcp_hub via this repo's `.meta.yaml`, e.g. n8n-mcp), or
 `registry-only` (no code — unmodified third-party or remote connector). The policy is in
 [`docs/server-hosting.md`](docs/server-hosting.md).
+
+### Known, not cataloged
+
+These MCP servers are wired in individual workspace repos but are **intentionally not
+cataloged** (see the inventory in [`docs/claude-config-inventory.md`](docs/claude-config-inventory.md)):
+
+- **agentic-flow**, **claude-flow** (`meta-ruvector`) — experimental ruvector R&D,
+  `autoStart:false`.
+- **qmd** (`obsidian-mind`) — repo-local Node script (`.claude/scripts/qmd-mcp.mjs`), not
+  portable.
+- **t** (`oh-my-claudecode`) — plugin-local bridge (`${CLAUDE_PLUGIN_ROOT}/bridge/…`).
+- **flow-nexus** (`ruflo`) — hardcoded `/workspaces/flow-cloud` devcontainer path; not
+  portable outside that container.
+
+They can be promoted to the catalog if/when they become portable and stable.
 
 ## Quick start
 

@@ -1,0 +1,9 @@
+{
+  "_comment": "Exa Search — hosted MCP endpoint (nothing runs locally). Core search works unauthenticated. For authenticated use, append your key as a query param (url: https://mcp.exa.ai/mcp?exaApiKey=${EXA_API_KEY}) — do NOT commit the literal key. Get a key at exa.ai. Merge into .claude/settings.json (Claude Code) or claude_desktop_config.json (Claude Desktop).",
+  "mcpServers": {
+    "exa": {
+      "type": "http",
+      "url": "https://mcp.exa.ai/mcp"
+    }
+  }
+}
