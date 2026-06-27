@@ -1,0 +1,12 @@
+{
+  "_comment": "n8n built-in MCP server — n8n's OWN MCP surface (Settings → MCP), distinct from the external `n8n-mcp` node-docs tool. Requires n8n running with MCP access enabled. Authenticated with a Bearer token of audience `mcp-server-api` (NOT a public-api key), carried in the Authorization header via ${N8N_MCP_SERVER_TOKEN} — keep it in a gitignored settings.local.json, NEVER commit it. Merge into .claude/settings.json or claude_desktop_config.json.",
+  "mcpServers": {
+    "n8n-builtin": {
+      "type": "http",
+      "url": "http://localhost:5678/mcp-server/http",
+      "headers": {
+        "Authorization": "Bearer ${N8N_MCP_SERVER_TOKEN}"
+      }
+    }
+  }
+}

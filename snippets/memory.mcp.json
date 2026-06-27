@@ -1,0 +1,9 @@
+{
+  "_comment": "Memory — official knowledge-graph reference server. Uses `bunx` (not `npx`) because the meta-managed JS runtime is Bun and the bundled `npx` is non-functional. Set MEMORY_FILE_PATH to relocate the store. (envctl wires a meta-native bash wrapper instead; this is the portable form.) Merge into .claude/settings.json or claude_desktop_config.json.",
+  "mcpServers": {
+    "memory": {
+      "command": "bunx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "schema": "./registry.schema.json",
-  "version": "1.4.0",
-  "updated": "2026-06-26",
+  "version": "1.5.0",
+  "updated": "2026-06-27",
   "org": "FlexNetOS",
   "description": "Canonical registry of MCP servers used across the FlexNetOS meta workspace.",
   "servers": [
@@ -287,6 +287,139 @@
       "summary": "Notion pages, databases, comments, and search via the claude.ai OAuth connector.",
       "doc": "servers/claude-ai-connectors.md",
       "snippet": "snippets/claude-ai.mcp.json"
+    },
+    {
+      "id": "github",
+      "displayName": "GitHub",
+      "kind": "external",
+      "hosting": "registry-only",
+      "runner": "docker",
+      "transport": "stdio",
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "repo": "github/github-mcp-server",
+      "status": "stable",
+      "auth": "api-key",
+      "requiresApi": true,
+      "summary": "GitHub repository, issue, PR, and Actions operations from an agent — the official GitHub MCP server (Go), run locally via Docker.",
+      "doc": "servers/github.md",
+      "snippet": "snippets/github.mcp.json",
+      "notes": "Official server (github/github-mcp-server, Go). Canonical run is the Docker image; the .github_org project pins it by digest. Alternatives: the legacy npm `@modelcontextprotocol/server-github` via `bunx`, or the remote OAuth endpoint `https://api.githubcopilot.com/mcp/`. PAT via the `${GITHUB_TOKEN}` env-ref — never commit the literal token."
+    },
+    {
+      "id": "exa",
+      "displayName": "Exa Search",
+      "kind": "remote",
+      "hosting": "registry-only",
+      "runner": "http",
+      "transport": "http",
+      "url": "https://mcp.exa.ai/mcp",
+      "repo": "exa-labs/exa-mcp-server",
+      "status": "stable",
+      "auth": "none",
+      "requiresApi": true,
+      "summary": "Web search and page-content retrieval via Exa's hosted MCP endpoint (nothing runs locally). Core search works unauthenticated; an Exa API key unlocks higher limits and more tools.",
+      "doc": "servers/exa.md",
+      "snippet": "snippets/exa.mcp.json",
+      "notes": "Hosted HTTP endpoint at mcp.exa.ai — no local install. For authenticated use, append the key as a query param (`https://mcp.exa.ai/mcp?exaApiKey=…`) via an env-ref; never commit the literal key. Get a key at exa.ai."
+    },
+    {
+      "id": "memory",
+      "displayName": "Memory (knowledge graph)",
+      "kind": "external",
+      "hosting": "registry-only",
+      "runner": "bunx",
+      "transport": "stdio",
+      "command": "bunx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "repo": "modelcontextprotocol/servers",
+      "status": "stable",
+      "auth": "none",
+      "summary": "Persistent knowledge-graph memory (entities, relations, observations) the agent can read and write across a session.",
+      "doc": "servers/memory.md",
+      "snippet": "snippets/memory.mcp.json",
+      "notes": "Official reference server (modelcontextprotocol/servers, src/memory, MIT). Launched with `bunx` (npx is non-functional in the meta env). envctl instead wires a meta-native bash wrapper (`envctl-mcp-memory-server`); the `bunx` form here is the portable canonical. Set `MEMORY_FILE_PATH` to relocate the store."
+    },
+    {
+      "id": "sequential-thinking",
+      "displayName": "Sequential Thinking",
+      "kind": "external",
+      "hosting": "registry-only",
+      "runner": "bunx",
+      "transport": "stdio",
+      "command": "bunx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "repo": "modelcontextprotocol/servers",
+      "status": "stable",
+      "auth": "none",
+      "summary": "A single tool for structured, step-by-step reflective reasoning — break a hard problem into revisable thought steps.",
+      "doc": "servers/sequential-thinking.md",
+      "snippet": "snippets/sequential-thinking.mcp.json",
+      "notes": "Official reference server (modelcontextprotocol/servers, src/sequentialthinking, MIT). Launched with `bunx` (npx is non-functional in the meta env)."
+    },
+    {
+      "id": "n8n-builtin",
+      "displayName": "n8n (built-in MCP server)",
+      "kind": "remote",
+      "hosting": "registry-only",
+      "runner": "http",
+      "transport": "http",
+      "url": "http://localhost:5678/mcp-server/http",
+      "env": {
+        "N8N_MCP_SERVER_TOKEN": "${N8N_MCP_SERVER_TOKEN}"
+      },
+      "status": "beta",
+      "auth": "api-key",
+      "requiresApi": true,
+      "summary": "n8n's OWN built-in MCP server (Settings → MCP), exposing your workflows as tools over authenticated HTTP. Complements the external `n8n-mcp` node-docs tool.",
+      "doc": "servers/n8n-builtin.md",
+      "snippet": "snippets/n8n-builtin.mcp.json",
+      "notes": "Distinct from `n8n-mcp` (the external node-documentation/validation tool). Requires a running n8n with MCP access enabled. Authenticated with a Bearer token of audience `mcp-server-api` (NOT a public-api key) carried in the snippet's `Authorization` header via `${N8N_MCP_SERVER_TOKEN}` — keep it in a gitignored settings.local.json, never commit it."
+    },
+    {
+      "id": "cognitum",
+      "displayName": "Cognitum (cloud)",
+      "kind": "remote",
+      "hosting": "registry-only",
+      "runner": "http",
+      "transport": "sse",
+      "url": "https://cognitum.one/mcpSse",
+      "env": {
+        "COGNITUM_API_KEY": "${COGNITUM_API_KEY}"
+      },
+      "status": "beta",
+      "auth": "api-key",
+      "requiresApi": true,
+      "summary": "Cognitum cloud control plane (api.cognitum.one) over SSE — 7 cloud tools (catalog, orders, witness chain, etc.). Read access is open; write operations need an API key.",
+      "doc": "servers/cognitum.md",
+      "snippet": "snippets/cognitum.mcp.json",
+      "notes": "FlexNetOS-related cloud service. Write ops require `${COGNITUM_API_KEY}` (env-ref, never commit). Pairs with `cognitum-seed` (the local appliance); shares its doc/snippet."
+    },
+    {
+      "id": "cognitum-seed",
+      "displayName": "Cognitum Seed (local appliance)",
+      "kind": "remote",
+      "hosting": "registry-only",
+      "runner": "http",
+      "transport": "sse",
+      "url": "https://cognitum.local:8443/mcp",
+      "env": {
+        "COGNITUM_SEED_TOKEN": "${COGNITUM_SEED_TOKEN}"
+      },
+      "status": "beta",
+      "auth": "api-key",
+      "requiresApi": true,
+      "summary": "Local Cognitum Seed appliance (114 on-device tools) over SSE. Requires a paired bearer token; falls back to the USB-gadget endpoint http://169.254.42.1/mcp (link-local, physical-cable trust).",
+      "doc": "servers/cognitum.md",
+      "snippet": "snippets/cognitum.mcp.json",
+      "notes": "FlexNetOS Seed USB / secret-manager factor — activates via link-local IPv4 (169.254.42.1:8443) + mDNS, not DHCP. Token via `${COGNITUM_SEED_TOKEN}` (env-ref). Shares its doc/snippet with `cognitum`."
     }
   ]
 }
